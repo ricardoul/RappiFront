@@ -1,0 +1,113 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Store</a>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart"> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="item in cart"><a href="#">{{item.name}}<span ng-click="removeFromCart(item)" class="glyphicon glyphicon-remove"></span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Orden Articulos<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><span class="btn" ng-click="orderField = 'name'">Nombre</span></li>
+            <li><span class="btn" ng-click="orderField = '-price'">Mayor Precio</span></li>
+            <li><span class="btn" ng-click="orderField = 'price'">Menor Precio</span></li>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div>
+</nav>
+
+<div class="container" style="background-color: #eee; width: 100%">
+  <div class="row">
+    <div class="col-sm-3">
+      <h3>Filtros <button class="btn btn-xs btn-default" ng-click="placement = {}">Limpiar filtros</button></h3>
+      <h4>Nombre:</h4>
+      <input type="text" ng-model="placement.name" class="form-control"
+             placeholder="Busqueda"/>
+      <br>
+      <h4>Categorias:</h4>
+      <select class="form-control" ng-model="placement.categorySummary" ng-options="cat for cat in categories"></select>
+      <br>
+      <div>
+        <h4>Rango de precios</h4>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"  ng-false-value="undefined" ng-true-value="true"  ng-model="placement.moreThan10000" ng-disabled="placement.lessThan3000" ng-change="updateFilter()">
+              Más de 10000
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"  ng-false-value="undefined" ng-true-value="true"  ng-model="placement.lessThan3000" ng-disabled="placement.moreThan10000" ng-change="updateFilter()">
+              Menor de 3000
+          </label>
+        </div>
+      </div>
+      <br>
+      <div>
+        <h4>O refinar por</h4>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-false-value="undefined" ng-true-value="true"  ng-model="placement.best_seller">
+              Más vendidos
+          </label>
+        </div>
+         <div class="checkbox">
+          <label>
+            <input type="checkbox"  ng-false-value="undefined" ng-true-value="true" ng-model="placement.available">
+              Disponibles
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-false-value="undefined" ng-true-value="false" ng-model="placement.available">
+              No Disponibles
+          </label>
+        </div>
+      </div>
+   </div>
+
+
+
+   <div class="col-sm-9">
+    <section id="eventsSection" class="eventContainer" ng-repeat="product in products | filter : placement | orderBy : orderField">      
+      <span>
+      <h3 class="eventTitleStyle">
+        {{product.name}} 
+      </h3>
+      <ul class="list-inline">
+     <li> <b>Categorias: </b> </li>
+          <li><h5>{{product.categorySummary}}</h5></li>
+      </ul>
+      </span>
+      <span>
+        <img ng-src="{{product.img}}">
+        <br>
+        <b><span>${{product.price}}</span></b>
+      </span>
+      <span>
+      <br>
+        <span id="location" class="eventData">
+
+         <p ng-if="product.available == true"> Disponible</p>
+         <p ng-if="product.available == false"> No Disponible</p>
+         <p ng-if="product.best_seller == true"> Mejor vendedor</p>
+        </span>
+      </span>
+      <div style="position:absolute;bottom: 0">
+        <p>
+        <br>{{product.description}} 
+        </p>
+        <button class="btn btn-success" ng-click="addToCart(product)">Add to cart</button>
+      </div>
+    </section>
+    <!--Barra de progreso de que tan lleno esta un evento-->
+  </div>
+</div>
